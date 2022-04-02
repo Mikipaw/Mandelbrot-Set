@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Programming/projects/Mandelbrot/main.cpp
+mandelbrot.h
+C:/Programming/projects/Mandelbrot/mandelbrot.h
+
+C:/Programming/projects/Mandelbrot/mandelbrot.h
+GL/gl.h
+-
+GL/glut.h
+-
+complex
+-
+
