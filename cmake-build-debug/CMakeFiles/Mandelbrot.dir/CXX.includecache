@@ -15,6 +15,12 @@ GL/gl.h
 -
 GL/glut.h
 -
+gl/glu.h
+-
+gl/glaux.h
+-
 complex
+-
+string
 -
 

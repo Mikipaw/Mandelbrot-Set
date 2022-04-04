@@ -14,30 +14,28 @@
 #include "mandelbrot.h"
 
 
-const int       WIDTH     = 800;
-const int       HEIGHT    = 600;
-const int       ROWS      = 30;
-const int       COLUMNS   = 40;
-
+const int       WIDTH     = 600;
+const int       HEIGHT    = 450;
 
 void Display() {
     glClear(GL_COLOR_BUFFER_BIT);
     glClearColor(0, 0, 0, 0);
 
-    glMatrixMode( GL_PROJECTION );
+    glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    const size_t width  = glutGet( GLUT_WINDOW_WIDTH );
-    const size_t height = glutGet( GLUT_WINDOW_HEIGHT );
-    glOrtho( 0, width, 0, height, -1, 1 );
+    const size_t width  = glutGet(GLUT_WINDOW_WIDTH);
+    const size_t height = glutGet(GLUT_WINDOW_HEIGHT);
+    glOrtho(0, width, 0, height, -1, 1);
 
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
 
     Create_Mandelbrot(-2, 3, 1.125, -2.25);
+    CalculateFrameRate();
 
     glutSwapBuffers();
-    glFlush();
+    //glFlush();
 }
 
 
@@ -52,6 +50,7 @@ int main(int argc, char** argv) {
 
     //glOrtho (0, WIDTH, HEIGHT, 0, -1, 1);
     glutDisplayFunc(Display);
+    glutIdleFunc(Display);
     glutMainLoop();
 
     return 0;
