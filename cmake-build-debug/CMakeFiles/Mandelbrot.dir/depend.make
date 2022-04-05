@@ -3,4 +3,4 @@
 
 CMakeFiles/Mandelbrot.dir/main.cpp.obj: \
  ../main.cpp \
- ../mandelbrot.h
+ ../mandelbrotSSE.h

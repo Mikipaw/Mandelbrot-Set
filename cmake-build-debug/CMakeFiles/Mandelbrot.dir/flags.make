@@ -6,5 +6,5 @@ CXX_DEFINES = -D_CRT_SECURE_NO_WARNINGS
 
 CXX_INCLUDES = 
 
-CXX_FLAGS = -O3 -Wall -Wextra -g -Wall -Wextra -std=gnu++2a
+CXX_FLAGS = -W -Wall -march=native -g -std=gnu++2a
 

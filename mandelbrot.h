@@ -7,8 +7,8 @@
 #define MANDELBROT_MANDELBROT_H
 
 #include <GL/gl.h>
-#include <complex>
 #include <GL/freeglut_std.h>
+#include <complex>
 
 using std::complex;
 

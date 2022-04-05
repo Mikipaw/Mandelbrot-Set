@@ -11,7 +11,7 @@
  *  \copyright GNU Public License.
  */
 
-#include "mandelbrot.h"
+#include "mandelbrotSSE.h"
 
 
 const int       WIDTH     = 600;
@@ -47,6 +47,7 @@ int main(int argc, char** argv) {
     glutInitWindowPosition(0, 0);
     glutInitWindowSize(WIDTH, HEIGHT);
     glutCreateWindow("Mandelbrot set");
+
 
     //glOrtho (0, WIDTH, HEIGHT, 0, -1, 1);
     glutDisplayFunc(Display);

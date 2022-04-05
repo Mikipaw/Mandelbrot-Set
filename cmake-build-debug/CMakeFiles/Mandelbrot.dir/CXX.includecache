@@ -7,20 +7,16 @@
 #IncludeRegexTransform: 
 
 C:/Programming/projects/Mandelbrot/main.cpp
-mandelbrot.h
-C:/Programming/projects/Mandelbrot/mandelbrot.h
+mandelbrotSSE.h
+C:/Programming/projects/Mandelbrot/mandelbrotSSE.h
 
-C:/Programming/projects/Mandelbrot/mandelbrot.h
+C:/Programming/projects/Mandelbrot/mandelbrotSSE.h
 GL/gl.h
 -
-GL/glut.h
--
-gl/glu.h
--
-gl/glaux.h
+GL/freeglut_std.h
 -
 complex
 -
-string
+immintrin.h
 -
 
