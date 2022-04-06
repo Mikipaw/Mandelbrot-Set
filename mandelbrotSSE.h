@@ -7,15 +7,18 @@
 #define MANDELBROT_MANDELBROTSSE_H
 
 #include <GL/gl.h>
-#include <GL/freeglut_std.h>
+#include <GL/freeglut.h>
+#include <GL/glu.h>
+#include <GL/glaux.h>
 #include <complex>
 #include <immintrin.h>
 
 using std::complex;
 
 const size_t BUFFER_SIZE = 8;
+const int    MAX_ITERATIONS = 255;
 
-void Create_Mandelbrot(float x, float dx, float y, float dy);
+void Create_Mandelbrot(float xC, float yC, float dx, float dy);
 
 void CalculateFrameRate() {
     char* source = new char[BUFFER_SIZE];
@@ -25,7 +28,6 @@ void CalculateFrameRate() {
 
     float currentTime = GetTickCount() * 0.001f;
     ++framesPerSecond;
-
     sprintf(source, "FPS: %d\n", fps);
     glColor3f(0.0f, 1.0f, 0.0f);  //RGBA values of text color
     glRasterPos2f(100, 120);
@@ -42,92 +44,53 @@ void CalculateFrameRate() {
     delete[] source;
 }
 
-void Create_Mandelbrot(float x, float dx, float y, float dy) {
-    const int MAX_ITERATIONS = 256;
+void Create_Mandelbrot(float xC, float yC, float dx, float dy) {
+    glBegin(GL_POINTS);
 
     const int width     = glutGet(GLUT_WINDOW_WIDTH);
     const int height    = glutGet(GLUT_WINDOW_HEIGHT);
 
-    glBegin(GL_POINTS);
+    for (int j = 0; j < height; ++j) {
 
-    const __m256 MaxRadius = _mm256_set1_ps(100.f);
-    const __m256 _63 = _mm256_set1_ps(63.f);
-    const __m256 _76543210 = _mm256_set_ps(7.f, 6.f, 5.f, 4.f, 3.f, 2.f, 1.f, 0.f);
+        float x = ((            - 400.f) * dx) + xC;
+        float y = (((float)j    - 300.f) * dy) + yC;
 
-    const __m256 max_iter = _mm256_set1_ps(MAX_ITERATIONS);
+        for (int i = 0; i < width; i += 8, x += dx * 8) {
+            __m256 _76543210   = _mm256_set_ps(7.f, 6.f, 5.f, 4.f, 3.f, 2.f, 1.f, 0.f);
+            __m256 x0 = _mm256_add_ps(_mm256_set1_ps(x), _mm256_mul_ps(_76543210, _mm256_set1_ps (dx)));
+            __m256 y0 =               _mm256_set1_ps(y);
+            __m256 MAX_RADIUS = _mm256_set1_ps(100.f);
 
+            __m256 X = x0;
+            __m256 Y = y0;
 
-    for (int i = 0; i < height; ++i) {
+            __m256i iterations = _mm256_setzero_si256();
 
-        float x0 = (          - 400.f) * dx + x,
-                y0 =((float)i - 300.f) * dy + y;
+            int step = 0;
 
-        for (int j = 0; j < width - 100; j += 8, x0 += dx*8) {
-            bool  in_set = false;
-            float green  = 0;
-            float blue   = 0;
-            int   step   = 0;
+            for (step = 0; step < MAX_ITERATIONS; step++) {
+                __m256 x2  = _mm256_mul_ps(X, X);
+                __m256 y2  = _mm256_mul_ps(Y, Y);
 
-            __m256 X0 = _mm256_add_ps(_mm256_set1_ps(x0), _mm256_mul_ps(_76543210, _mm256_set1_ps(dx)));
-            __m256 Y0 =            _mm256_set1_ps (y0);
+                __m256 r2 = _mm256_add_ps(x2, y2);
 
-            __m256 X = X0, Y = Y0;
+                __m256 cmp = _mm256_cmp_ps(r2, MAX_RADIUS, _CMP_LE_OQ);
+                int64_t bitMask = _mm256_movemask_ps(cmp);
+                if (!bitMask) break;
 
-            __m256i N = _mm256_setzero_si256();
+                iterations = _mm256_sub_epi32(iterations, _mm256_castps_si256(cmp));
 
-            __m256  r2;
+                __m256 xy = _mm256_mul_ps(X, Y);
 
-            for (; ; ++step) {
-                __m256  x2 = _mm256_mul_ps (X, X),
-                        y2 = _mm256_mul_ps (Y, Y);
-
-                        r2 = _mm256_add_ps (x2, y2);
-
-                __m256  cmp = _mm256_cmp_ps(r2, MaxRadius, _CMP_LE_OQ); // r2 < MaxRadius
-
-                int mask = _mm256_movemask_ps(cmp);
-                if (mask) {
-                    in_set == true;
-                    break;
-                }
-
-                N = _mm256_sub_epi32(N, _mm256_castps_si256(cmp));
-
-                __m256 xy = _mm256_mul_ps (X, Y);
-
-                X = _mm256_add_ps(_mm256_sub_ps(x2, y2), X0);
-                Y = _mm256_add_ps(_mm256_add_ps(xy, xy), Y0);
-                //z = (z * z) + c;
-                if (step == MAX_ITERATIONS) {
-                    in_set = true;
-                    break;
-                }
+                X = _mm256_add_ps(_mm256_sub_ps(x2, y2), x0);
+                Y = _mm256_add_ps(_mm256_add_ps(xy, xy), y0);
             }
-//hash tables методом цепочек. Берем русский текст. Хеш таблица с маленьким размером. Длины списков хеш таблицы должны быть достаточны
-//
-            __m256 I = _mm256_mul_ps (_mm256_sqrt_ps (_mm256_sqrt_ps (_mm256_div_ps (_mm256_cvtepi32_ps(N), max_iter))), _63);
 
             for (int k = 0; k < 8; k++) {
-              int*   pN = (int*)   &N;
-                float* pI = (float*) &I;
-
-          /*      BYTE    c     = (BYTE) pI[i];
-                RGBQUAD color = (pn[i] < MAX_ITERATIONS)? RGBQUAD { (BYTE) (255-c), (BYTE) (c%2 * 64), c } : RGBQUAD {};
-
-                glColor3ub(color.rgbRed, color.rgbGreen, color.rgbBlue);
-*/
-                BYTE c = (BYTE) pI[i];
-                RGBQUAD color = (pN[i] < MAX_ITERATIONS)? RGBQUAD { (BYTE) (255-c), (BYTE) (c%2 * 64), c } : RGBQUAD {};
-                //blue = (float) step / MAX_ITERATIONS;
-
-                if(in_set) {
-                    //green = (float) r2[0] / 4;
-                    glColor3f(color.rgbRed, color.rgbGreen, color.rgbBlue);
-                }
-                else {
-                    glColor3f(color.rgbRed, color.rgbGreen, color.rgbBlue);
-                }
-                glVertex2i(j + k, i);
+                auto *buffer = (int*) &iterations;
+                RGBQUAD pixel = (buffer[k] < MAX_ITERATIONS) ? RGBQUAD {u_char (buffer[k]), u_char ((float) buffer[k] / 256 * (float) buffer[k]), u_char (128 - buffer[k]), 1} : RGBQUAD { u_char (step * k) , u_char (k * k), u_char (k * 32), 0 };
+                glColor3f((float) pixel.rgbRed / 256.f, (float) pixel.rgbGreen / 256.f, (float) pixel.rgbBlue / 256.f);
+                glVertex2i(i + k, j);
             }
         }
     }

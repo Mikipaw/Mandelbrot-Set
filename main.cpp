@@ -14,8 +14,16 @@
 #include "mandelbrotSSE.h"
 
 
-const int       WIDTH     = 600;
-const int       HEIGHT    = 450;
+const int       WIDTH     = 800;
+const int       HEIGHT    = 600;
+
+float   xC = 0,
+        yC = 0,
+        dx = 1/200.f,
+        dy = 1/200.f,
+        scx = 1,
+        scy = 1,
+        sc = 1;
 
 void Display() {
     glClear(GL_COLOR_BUFFER_BIT);
@@ -31,7 +39,25 @@ void Display() {
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
 
-    Create_Mandelbrot(-2, 3, 1.125, -2.25);
+    if (GetAsyncKeyState (VK_ESCAPE)) glutLeaveMainLoop();
+
+    if (GetAsyncKeyState (VK_RIGHT)) xC    += dx * (GetAsyncKeyState (VK_SHIFT)? 100.f * sc: 10.f * sc);
+    if (GetAsyncKeyState (VK_LEFT))  xC    -= dx * (GetAsyncKeyState (VK_SHIFT)? 100.f * sc: 10.f * sc);
+    if (GetAsyncKeyState (VK_DOWN))  yC    -= dy * (GetAsyncKeyState (VK_SHIFT)? 100.f * sc: 10.f * sc);
+    if (GetAsyncKeyState (VK_UP))    yC    += dy * (GetAsyncKeyState (VK_SHIFT)? 100.f * sc: 10.f * sc);
+    if (GetAsyncKeyState ('A'))      sc    += dx * (GetAsyncKeyState (VK_SHIFT)? 100.f * sc : 10.f * sc);
+    if (GetAsyncKeyState ('Z'))      sc    -= dx * (GetAsyncKeyState (VK_SHIFT)? 100.f * sc : 10.f * sc);
+
+    if (GetAsyncKeyState ('K'))      scx    += dx * (GetAsyncKeyState (VK_SHIFT)? 100.f * scx : 10.f * scx);
+    if (GetAsyncKeyState ('M'))      scx    -= dx * (GetAsyncKeyState (VK_SHIFT)? 100.f * scx : 10.f * scx);
+
+    if (GetAsyncKeyState ('I'))      scy    += dy * (GetAsyncKeyState (VK_SHIFT)? 100.f * scy : 10.f * scy);
+    if (GetAsyncKeyState ('O'))      scy    -= dy * (GetAsyncKeyState (VK_SHIFT)? 100.f * scy : 10.f * scy);
+
+    if (GetAsyncKeyState('F')) glutFullScreen();
+    if (GetAsyncKeyState('C')) glutLeaveFullScreen();
+
+    Create_Mandelbrot(xC, yC, dx * sc * scx, dy * sc * scy);
     CalculateFrameRate();
 
     glutSwapBuffers();

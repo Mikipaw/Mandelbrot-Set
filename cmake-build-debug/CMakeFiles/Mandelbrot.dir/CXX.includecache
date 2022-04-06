@@ -13,7 +13,11 @@ C:/Programming/projects/Mandelbrot/mandelbrotSSE.h
 C:/Programming/projects/Mandelbrot/mandelbrotSSE.h
 GL/gl.h
 -
-GL/freeglut_std.h
+GL/freeglut.h
+-
+GL/glu.h
+-
+GL/glaux.h
 -
 complex
 -
