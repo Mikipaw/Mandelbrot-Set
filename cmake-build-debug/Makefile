@@ -152,6 +152,30 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Mandelbrot.dir\build.make CMakeFiles/Mandelbrot.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+mandelbrotSSE.obj: mandelbrotSSE.cpp.obj
+.PHONY : mandelbrotSSE.obj
+
+# target to build an object file
+mandelbrotSSE.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Mandelbrot.dir\build.make CMakeFiles/Mandelbrot.dir/mandelbrotSSE.cpp.obj
+.PHONY : mandelbrotSSE.cpp.obj
+
+mandelbrotSSE.i: mandelbrotSSE.cpp.i
+.PHONY : mandelbrotSSE.i
+
+# target to preprocess a source file
+mandelbrotSSE.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Mandelbrot.dir\build.make CMakeFiles/Mandelbrot.dir/mandelbrotSSE.cpp.i
+.PHONY : mandelbrotSSE.cpp.i
+
+mandelbrotSSE.s: mandelbrotSSE.cpp.s
+.PHONY : mandelbrotSSE.s
+
+# target to generate assembly for a file
+mandelbrotSSE.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\Mandelbrot.dir\build.make CMakeFiles/Mandelbrot.dir/mandelbrotSSE.cpp.s
+.PHONY : mandelbrotSSE.cpp.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -164,6 +188,9 @@ help:
 	@echo ... main.obj
 	@echo ... main.i
 	@echo ... main.s
+	@echo ... mandelbrotSSE.obj
+	@echo ... mandelbrotSSE.i
+	@echo ... mandelbrotSSE.s
 .PHONY : help
 
 

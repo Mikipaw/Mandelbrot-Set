@@ -10,6 +10,11 @@
 #include <GL/freeglut_std.h>
 #include <complex>
 
+/*
+ * There is the Mandelbrot set program without optimization.
+ */
+
+
 using std::complex;
 
 const size_t BUFFER_SIZE = 8;

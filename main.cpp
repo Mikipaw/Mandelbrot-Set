@@ -11,19 +11,38 @@
  *  \copyright GNU Public License.
  */
 
-#include "mandelbrotSSE.h"
+#include "mandelbrotSSEcpp.h"
 
 
 const int       WIDTH     = 800;
 const int       HEIGHT    = 600;
 
-float   xC = 0,
-        yC = 0,
-        dx = 1/200.f,
-        dy = 1/200.f,
-        scx = 1,
-        scy = 1,
-        sc = 1;
+float   xC      = 0,
+        yC      = 0,
+        dx      = 1/200.f,
+        dy      = 1/200.f,
+        scx     = 1,
+        scy     = 1,
+        sc      = 1;
+
+void Display();
+
+
+int main(int argc, char** argv) {
+
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
+
+    glutInitWindowPosition(0, 0);
+    glutInitWindowSize(WIDTH, HEIGHT);
+    glutCreateWindow("Mandelbrot set");
+
+    glutDisplayFunc(Display);
+    glutIdleFunc(Display);
+    glutMainLoop();
+
+    return 0;
+}
 
 void Display() {
     glClear(GL_COLOR_BUFFER_BIT);
@@ -61,24 +80,5 @@ void Display() {
     CalculateFrameRate();
 
     glutSwapBuffers();
-    //glFlush();
 }
 
-
-int main(int argc, char** argv) {
-
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
-
-    glutInitWindowPosition(0, 0);
-    glutInitWindowSize(WIDTH, HEIGHT);
-    glutCreateWindow("Mandelbrot set");
-
-
-    //glOrtho (0, WIDTH, HEIGHT, 0, -1, 1);
-    glutDisplayFunc(Display);
-    glutIdleFunc(Display);
-    glutMainLoop();
-
-    return 0;
-}

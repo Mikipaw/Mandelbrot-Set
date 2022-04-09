@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/Mandelbrot.dir/main.cpp.obj"
+  "CMakeFiles/Mandelbrot.dir/mandelbrotSSE.cpp.obj"
   "Mandelbrot.exe"
   "Mandelbrot.exe.manifest"
   "Mandelbrot.pdb"

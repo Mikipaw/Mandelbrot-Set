@@ -85,6 +85,12 @@
 		<Unit filename="C:/Programming/projects/Mandelbrot/main.cpp">
 			<Option target="Mandelbrot"/>
 		</Unit>
+		<Unit filename="C:/Programming/projects/Mandelbrot/mandelbrotSSE.cpp">
+			<Option target="Mandelbrot"/>
+		</Unit>
+		<Unit filename="C:/Programming/projects/Mandelbrot/mandelbrotSSE.h">
+			<Option target="Mandelbrot"/>
+		</Unit>
 		<Unit filename="C:/Programming/projects/Mandelbrot/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
