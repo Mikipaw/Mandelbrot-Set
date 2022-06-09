@@ -11,7 +11,7 @@
  *  \copyright GNU Public License.
  */
 
-#include "mandelbrotSSEcpp.h"
+#include "mandelbrotSSE.h"
 
 
 const int       WIDTH     = 800;
@@ -21,6 +21,9 @@ float   xC      = 0,
         yC      = 0,
         dx      = 1/200.f,
         dy      = 1/200.f,
+
+        //dx      = 2,
+        //dy      = 2,
         scx     = 1,
         scy     = 1,
         sc      = 1;
@@ -60,12 +63,13 @@ void Display() {
 
     if (GetAsyncKeyState (VK_ESCAPE)) glutLeaveMainLoop();
 
-    if (GetAsyncKeyState (VK_RIGHT)) xC    += dx * (GetAsyncKeyState (VK_SHIFT)? 100.f * sc: 10.f * sc);
-    if (GetAsyncKeyState (VK_LEFT))  xC    -= dx * (GetAsyncKeyState (VK_SHIFT)? 100.f * sc: 10.f * sc);
-    if (GetAsyncKeyState (VK_DOWN))  yC    -= dy * (GetAsyncKeyState (VK_SHIFT)? 100.f * sc: 10.f * sc);
-    if (GetAsyncKeyState (VK_UP))    yC    += dy * (GetAsyncKeyState (VK_SHIFT)? 100.f * sc: 10.f * sc);
-    if (GetAsyncKeyState ('A'))      sc    += dx * (GetAsyncKeyState (VK_SHIFT)? 100.f * sc : 10.f * sc);
-    if (GetAsyncKeyState ('Z'))      sc    -= dx * (GetAsyncKeyState (VK_SHIFT)? 100.f * sc : 10.f * sc);
+    //glutKeyboardFunc()
+    if (GetAsyncKeyState (VK_RIGHT)) xC     += dx * (GetAsyncKeyState (VK_SHIFT)? 100.f * sc : 10.f * sc);
+    if (GetAsyncKeyState (VK_LEFT))  xC     -= dx * (GetAsyncKeyState (VK_SHIFT)? 100.f * sc : 10.f * sc);
+    if (GetAsyncKeyState (VK_DOWN))  yC     -= dy * (GetAsyncKeyState (VK_SHIFT)? 100.f * sc : 10.f * sc);
+    if (GetAsyncKeyState (VK_UP))    yC     += dy * (GetAsyncKeyState (VK_SHIFT)? 100.f * sc : 10.f * sc);
+    if (GetAsyncKeyState ('A'))      sc     += dx * (GetAsyncKeyState (VK_SHIFT)? 100.f * sc : 10.f * sc);
+    if (GetAsyncKeyState ('Z'))      sc     -= dx * (GetAsyncKeyState (VK_SHIFT)? 100.f * sc : 10.f * sc);
 
     if (GetAsyncKeyState ('K'))      scx    += dx * (GetAsyncKeyState (VK_SHIFT)? 100.f * scx : 10.f * scx);
     if (GetAsyncKeyState ('M'))      scx    -= dx * (GetAsyncKeyState (VK_SHIFT)? 100.f * scx : 10.f * scx);
@@ -76,8 +80,9 @@ void Display() {
     if (GetAsyncKeyState('F')) glutFullScreen();
     if (GetAsyncKeyState('C')) glutLeaveFullScreen();
 
-    Create_Mandelbrot(xC, yC, dx * sc * scx, dy * sc * scy);
-    CalculateFrameRate();
+    //Create_Mandelbrot(xC, yC, dx, dy);
+    Create_MandelbrotSSE(xC, yC, dx * sc * scx, dy * sc * scy);
+//    CalculateFrameRate();
 
     glutSwapBuffers();
 }

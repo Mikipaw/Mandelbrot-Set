@@ -16,8 +16,47 @@ void Create_Mandelbrot(float xC, float yC, float dx, float dy)  {
         float x = ((            - 400.f) * dx) + xC;
         float y = (((float)j    - 300.f) * dy) + yC;
 
+        for (int i = 0; i < width; i += 1, x += dx * 1) {
+            complex<double> c(x, y);
+
+            complex<double> z = c;
+
+            int step = 0;
+
+            for (; abs(z) < 100; ++step) {
+                z = (z * z) + c;
+                if (step >= MAX_ITERATIONS) {
+                    break;
+                }
+            }
+
+                float k = (float) ((float)((i + j) % 8)) ;
+                RGBQUAD pixel = (step < MAX_ITERATIONS) ?
+                        RGBQUAD {u_char (step),u_char ((float) step / 256 * (float) step), u_char (128 - step), 1} :
+                        RGBQUAD { u_char ((float)step * k) , u_char (k * k), u_char (k * 32), 0 };
+
+                glColor3f((float) pixel.rgbRed / 256.f, (float) pixel.rgbGreen / 256.f, (float) pixel.rgbBlue / 256.f);
+                glVertex2i(i, j);
+
+        }
+    }
+    glEnd();
+}
+
+void Create_MandelbrotSSE(float xC, float yC, float dx, float dy)  {
+    glBegin(GL_POINTS);
+
+    const int width     = glutGet(GLUT_WINDOW_WIDTH);
+    const int height    = glutGet(GLUT_WINDOW_HEIGHT);
+
+    for (int j = 0; j < height; ++j) {
+
+        float x = ((            - 400.f) * dx) + xC;
+        float y = (((float)j    - 300.f) * dy) + yC;
+
+        __m256 _76543210   = _mm256_set_ps(7.f, 6.f, 5.f, 4.f, 3.f, 2.f, 1.f, 0.f);
+
         for (int i = 0; i < width; i += 8, x += dx * 8) {
-            __m256 _76543210   = _mm256_set_ps(7.f, 6.f, 5.f, 4.f, 3.f, 2.f, 1.f, 0.f);
             __m256 x0 = _mm256_add_ps(_mm256_set1_ps(x), _mm256_mul_ps(_76543210, _mm256_set1_ps (dx)));
             __m256 y0 =               _mm256_set1_ps(y);
             __m256 MAX_RADIUS = _mm256_set1_ps(100.f);
@@ -49,7 +88,11 @@ void Create_Mandelbrot(float xC, float yC, float dx, float dy)  {
 
             for (int k = 0; k < 8; k++) {
                 auto *buffer = (int*) &iterations;
-                RGBQUAD pixel = (buffer[k] < MAX_ITERATIONS) ? RGBQUAD {u_char (buffer[k]), u_char ((float) buffer[k] / 256 * (float) buffer[k]), u_char (128 - buffer[k]), 1} : RGBQUAD { u_char (step * k) , u_char (k * k), u_char (k * 32), 0 };
+
+                RGBQUAD pixel = (buffer[k] < MAX_ITERATIONS) ?
+                                RGBQUAD {u_char (buffer[k]),u_char ((float) buffer[k] / 256 * (float) buffer[k]), u_char (128 - buffer[k]), 1} :
+                                RGBQUAD { u_char (step * k) , u_char (k * k), u_char (k * 32), 0 };
+
                 glColor3f((float) pixel.rgbRed / 256.f, (float) pixel.rgbGreen / 256.f, (float) pixel.rgbBlue / 256.f);
                 glVertex2i(i + k, j);
             }
@@ -57,6 +100,8 @@ void Create_Mandelbrot(float xC, float yC, float dx, float dy)  {
     }
     glEnd();
 }
+
+
 
 void CalculateFrameRate() {
     char* source = new char[BUFFER_SIZE];

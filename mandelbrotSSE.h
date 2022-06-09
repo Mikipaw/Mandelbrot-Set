@@ -13,11 +13,16 @@
 #include <immintrin.h>
 #include <cstdint>
 #include <cstdio>
+#include <complex.h>
+
+using std::complex;
 
 const size_t BUFFER_SIZE = 8;
 const int    MAX_ITERATIONS = 255;
 
 void Create_Mandelbrot(float xC, float yC, float dx, float dy);
+
+void Create_MandelbrotSSE(float xC, float yC, float dx, float dy);
 
 void CalculateFrameRate();
 

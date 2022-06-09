@@ -6,26 +6,6 @@
 
 #IncludeRegexTransform: 
 
-C:/Programming/projects/Mandelbrot/a8float.h
-GL/gl.h
--
-GL/freeglut.h
--
-GL/glu.h
--
-GL/glaux.h
--
-immintrin.h
--
-cstdint
--
-cstdio
--
-
-C:/Programming/projects/Mandelbrot/main.cpp
-mandelbrotSSEcpp.h
-C:/Programming/projects/Mandelbrot/mandelbrotSSEcpp.h
-
 C:/Programming/projects/Mandelbrot/mandelbrotSSE.cpp
 mandelbrotSSE.h
 C:/Programming/projects/Mandelbrot/mandelbrotSSE.h
@@ -45,8 +25,6 @@ cstdint
 -
 cstdio
 -
-
-C:/Programming/projects/Mandelbrot/mandelbrotSSEcpp.h
-a8float.h
-C:/Programming/projects/Mandelbrot/a8float.h
+complex.h
+-
 
